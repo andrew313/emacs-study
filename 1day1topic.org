@@ -1,0 +1,66 @@
+* TEST 中文
+#+begin_src emacs-lisp
+(shell-command "ls")
+#+end_src
+
+*** TODO Install spacemacs in fedora
+**** DONE test run maxima in org
+#+name: test-maxima
+#+header: :exports results
+#+header: :var x=3
+#+begin_src maxima 
+  programmode: false;
+  print(3^x);
+#+end_src
+
+#+RESULTS: test-maxima
+: 27
+**** DONE Install source code pro font in fedora
+With root user and run
+#+BEGIN_EXAMPLE
+yum install adobe-source-code-pro-fonts
+#+END_EXAMPLE
+**** install emacs (ignore)
+It's so sample and ignore it.
+**** DONE Modify the melpa mirror
+#+BEGIN_EXAMPLE
+(require 'package)
+(setq package-archives '(
+			 ("gnu"          . "http://elpa.emacs-china.org/gnu/")
+			 ("melpa"        . "http://elpa.emacs-china.org/melpa/")
+			 ("gnu"          . "http://elpa.gnu.org/packages/")
+                         ("melpa"        . "http://melpa.org/packages/")
+                         ("melpa-stable" . "http://stable.melpa.org/packages/")
+			 ))
+(package-initialize)
+#+END_EXAMPLE
+**** TODO run bash in emacs org mode
+
+*** centos chinese local 
+#+BEGIN_EXAMPLE
+yum installgroup "fonts"
+#+END_EXAMPLE 
+** TODO use bash or sh src code clone spacemacs 
+#+BEGIN_SRC sh
+ls
+#+END_SRC
+
+Modify spacemacs-start-directory variable
+
+This solution is better suited to "embed" Spacemacs into your own configuration. Say you cloned Spacemacs in ~/.emacs.d/spacemacs/ then drop these lines in ~/.emacs.d/init.el:
+
+(setq spacemacs-start-directory "~/.emacs.d/spacemacs/")
+(load-file (concat spacemacs-start-directory "init.el"))
+
+#+BEGIN_SRC sh
+git clone https://github.com/syl20bnr/spacemacs.git ~/.emacs.d/spacemacs/
+#+END_SRC
+** use shell-command to clone spacemacs
+#+begin_src emacs-lisp
+(shell-command "git clone https://github.com/syl20bnr/spacemacs.git ~/.emacs.d/spacemacs/")
+#+end_src
+
+#+RESULTS:
+: 0
+
+
