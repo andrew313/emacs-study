@@ -56,8 +56,9 @@ This solution is better suited to "embed" Spacemacs into your own configuration.
 git clone https://github.com/syl20bnr/spacemacs.git ~/.emacs.d/spacemacs/
 #+END_SRC
 ** use shell-command to clone spacemacs
+Only clone the develop branch
 #+begin_src emacs-lisp
-(shell-command "git clone https://github.com/syl20bnr/spacemacs.git ~/.emacs.d/spacemacs/")
+(shell-command "git clone -b develop https://github.com/syl20bnr/spacemacs.git ~/.emacs.d/")
 #+end_src
 
 #+RESULTS:
