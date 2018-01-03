@@ -1,22 +1,86 @@
-* TEST 中文
-#+begin_src emacs-lisp
-(shell-command "ls")
-#+end_src
+#+LATEX_HEADER: \usepackage{CJKutf8}                   % 中英文混排
+#+LaTeX_HEADER: \begin{CJK}{UTF8}{gbsn}
+#+LaTeX_HEADER: \hypersetup{bookmarks=true}
+#+LATEX_HEADER: \usepackage[left=2.0cm, right=2.0cm, top=2.00cm, bottom=2.00cm]{geometry}
+** spacemacs操作
+*** 在spacemcs 中折行
+  使用“space t l”来切换 
+*** 跳到行首行尾
+退出到普通模式，输入‘$’,跳到行尾
+输入“^”,跳到行首第一个非空字符
+*** 插入字符
+i，在光标前，a光标后插入， 光标的英语是cursor
+** tex 安装
+ 到这里下载；
+ https://tug.org/texlive/acquire-netinstall.html
+ install-tl-unx.tar.gz
+ 解压，进入目录，运行文字界面的安装器。
+ #+BEGIN_EXAMPLE
+ sudo perl install-tl
+ #+END_EXAMPLE
+ 选择包。安装。
+ 使用进入目录， /usr/local/texlive/2017/bin/x86_64-linux/
+ 使用：sudo ./tlmgr gui，来运行图形界面的安装器。
+ 安装需要的sty文件
+** org 头部输出函数
+
+#+name: autoplothead
+#+BEGIN_SRC emacs-lisp :
+(defun SrcDecorate (&optional caption attributes )
+  "A wrap function for src blocks."
+  (concat
+   "ORG\n"
+   (when attributes
+     (concat (mapconcat 'identity attributes "\n") "\n"))
+   (when caption
+     (format "#+caption: %s" caption))))
+#+END_SRC
+
+#+RESULTS: autoplothead
+: SrcDecorate
+
+**** TEST 中文
+   #+BEGIN_SRC emacs-lisp
+   (shell-command "ls")
+   #+END_SRC
 
 *** TODO Install spacemacs in fedora
 **** DONE test run maxima in org
-#+name: test-maxima
-#+header: :exports results
-#+header: :var x=3
-#+begin_src maxima 
-  programmode: false;
-  print(3^x);
-#+end_src
-
+set up the .spacemacs
+#+BEGIN_EXAMPLE
+  (org-babel-do-load-languages 'org-babel-load-lalibcurl-develnguages '((maxima .t)))
+#+END_EXAMPLE
 #+RESULTS: test-maxima
-: 27
+: 8
+**** TODO test run R in org 
+***** install R package http://bird.so/search?q=centos%20yum%20dnfdragora
+#+BEGIN_EXAMPLE
+install.packages("ggplot2")
+#+END_EXAMPLE
+
+ #+BEGIN_SRC R -n :wrap (SrcDecorate "改进后使用的R-QQ及SW分析" '("#+attr_latex: :width 3in" "#+attr_org: :widtexport TEXINPUTS=/usr/local/texlive/2017/texmf-dist/tex/latex/latexconfigh 800" "#+name: fig:R35NewST"))  :results output graphics  :file figure/R35NewST.png :exports results
+ L3501<-c(35.000,35.012,35.002,35.010,35.008,35.006,35.015,35.007,35.002,35.013,34.993,35.010,35.020,35.010,35.010,35.008,35.000,35.007,35.018,35.024,35.000,35.006,35.018,34.996,35.000)
+ L3502<-c(34.998,35.011,35.001,35.009,35.009,35.007,35.004,34.998,35.003,35.002,34.989,34.998,35.000,35.000,35.009,35.009,34.988,35.009,35.010,35.018,34.990,35.002,35.015,34.989,34.992)
+ L3503<-c(35.001,35.011,35.000,35.009,35.001,34.999,35.011,34.991,35.000,35.001,34.980,35.009,34.999,35.012,35.012,35.011,35.005,35.005,35.011,35.019,34.992,34.991,35.002,34.990,34.989)
+ l35all<-c(L3501,L3502,L3503)
+ qqnorm(l35all)#QQ图
+ qqline(l35all)
+ stest <- shapiro.test(l35all)#将SW检验输入到QQ图中方便查看
+ str<-sprintf("p-value=%f",stest$p.value)
+ text(-2, 35,str)
+ #+end_src
+
+ #+RESULTS:
+ #+BEGIN_ORG
+ #+attr_latex: :width 3in
+ #+attr_org: :width 800
+ #+name: fig:R35NewST
+ #+caption: 改进后使用的R-QQ及SW分析
+ [[file:figure/R35NewST.png]]
+ #+END_ORG
+
 **** DONE Install source code pro font in fedora
-With root user and run
+With root user and run 
 #+BEGIN_EXAMPLE
 yum install adobe-source-code-pro-fonts
 #+END_EXAMPLE
@@ -64,4 +128,44 @@ Only clone the develop branch
 #+RESULTS:
 : 0
 
+
+** PDF输出
+
+**** Use R install texlive package .
+*****  File `wrapfig.sty' not found. problem.
+install tinytex package
+#+BEGIN_EXAMPLE
+R
+install.packages("tinytex")
+#+END_EXAMPLE
+
+#+BEGIN_SRC R
+tinytex::tlmgr_search("wrapfig.sty")
+#+END_SRC
+
+#+RESULTS:
+: 127
+** 从源码包直接安装R
+1.下载：
+https://mirrors.tuna.tsinghua.edu.cn/CRAN/
+2.安装方法。
+https://cran.r-project.org/doc/manuals/r-release/R-admin.html#Simple-compilation
+3.有给个错误
+A。readline-devel。直接安装。yum install readline
+B。libcurl.本来是需求是7.22,实际为：7.29
+rpm -Uvh http://www.city-fan.org/ftp/contrib/yum-repo/rhel6/x86_64/city-fan.org-release-1-13.rhel6.noarch.rpm
+yum install libcurl
+升级到7.57,错误依然,安装libcurl-devel 后解决
+这个是由，
+http://stackmirror.bird.so/page/s1gp21vd99v6
+参考到查到的资料。
+https://cran.r-project.org/web/packages/curl/index.html
+安装命令
+#+BEGIN_EXAMPLE
+yum install libcurl-devel
+#+END_EXAMPLE
+接下来，要先make ,直接使用make install 是不行的。
+make
+make check
+make install貌似这一步不需要了。
 
