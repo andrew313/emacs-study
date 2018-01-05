@@ -1,29 +1,7 @@
+#+LATEX_HEADER: \usepackage[left=2.0cm, right=2.0cm, top=2.00cm, bottom=2.00cm]{geometry}
 #+LATEX_HEADER: \usepackage{CJKutf8}                   % 中英文混排
 #+LaTeX_HEADER: \begin{CJK}{UTF8}{gbsn}
-#+LaTeX_HEADER: \hypersetup{bookmarks=true}
-#+LATEX_HEADER: \usepackage[left=2.0cm, right=2.0cm, top=2.00cm, bottom=2.00cm]{geometry}
-** spacemacs操作
-*** 在spacemcs 中折行
-  使用“space t l”来切换 
-*** 跳到行首行尾
-退出到普通模式，输入‘$’,跳到行尾
-输入“^”,跳到行首第一个非空字符
-*** 插入字符
-i，在光标前，a光标后插入， 光标的英语是cursor
-** tex 安装
- 到这里下载；
- https://tug.org/texlive/acquire-netinstall.html
- install-tl-unx.tar.gz
- 解压，进入目录，运行文字界面的安装器。
- #+BEGIN_EXAMPLE
- sudo perl install-tl
- #+END_EXAMPLE
- 选择包。安装。
- 使用进入目录， /usr/local/texlive/2017/bin/x86_64-linux/
- 使用：sudo ./tlmgr gui，来运行图形界面的安装器。
- 安装需要的sty文件
 ** org 头部输出函数
-
 #+name: autoplothead
 #+BEGIN_SRC emacs-lisp :
 (defun SrcDecorate (&optional caption attributes )
@@ -52,7 +30,96 @@ set up the .spacemacs
 #+END_EXAMPLE
 #+RESULTS: test-maxima
 : 8
-**** TODO test run R in org 
+** spacemacs操作
+*** 在spacemcs 中折行
+  使用“space t l”来切换 
+*** 跳到行首行Budgie 尾
+退出到普通模式，输入‘$’,跳到行尾
+输入“^”,跳到行首第一个非空字符
+*** 插入字符i,a
+i，在光标前，a光标后插入， 光标的英语是cursor
+*** undo and redo
+undo= C-/
+redo= C-?
+space a u display undo redo tree
+C  ＋ 箭头在树中移动
+** DONE tex 安装
+   CLOSED: [2018-01-03 三 21:15]
+ 到这里下载；
+ https://tug.org/texlive/acquire-netinstall.html
+ install-tl-unx.tar.gz
+ 解压，进入目录，运行文字界面的安装器。
+ #+BEGIN_EXAMPLE
+ sudo perl install-tl
+ #+END_EXAMPLE
+ 选择包。安装。
+ 使用进入目录， /usr/local/texlive/2017/bin/x86_64-linux/
+ 使用：sudo ./tlmgr gui，来运行图形界面的安装器。
+ 安装需要的sty文件
+** TODO use bash or sh src code clone spacemacs 
+#+BEGIN_SRC sh
+ls
+#+END_SRC
+
+Modify spacemacs-start-directory variable
+
+This solution is better suited to "embed" Spacemacs into your own configuration. Say you cloned Spacemacs in ~/.emacs.d/spacemacs/ then drop these lines in ~/.emacs.d/init.el:
+
+(setq spacemacs-start-directory "~/.emacs.d/spacemacs/")
+(load-file (concat spacemacs-start-directory "init.el"))
+
+#+BEGIN_SRC sh
+git clone https://github.com/syl20bnr/spacemacs.git ~/.emacs.d/spacemacs/
+#+END_SRC
+** use shell-command to clone spacemacs
+Only clone the develop branch
+#+begin_src emacs-lisp
+(shell-command "git clone -b develop https://github.com/syl20bnr/spacemacs.git ~/.emacs.d/")
+#+end_src
+
+#+RESULTS:
+: 0
+
+** PDF输出
+**** Use R install texlive package .no need ,can install by "sudo tlmgr gui"
+*****  File `wrapfig.sty' not found. problem.
+install tinytex package
+#+BEGIN_EXAMPLE
+R
+install.packages("tinytex")
+#+END_EXAMPLE
+
+#+BEGIN_SRC R
+tinytex::tlmgr_search("wrapfig.sty")
+#+END_SRC
+
+#+RESULTS:
+: 127
+** 从源码包直接安装R
+1. 下载：\\
+https://mirrors.tuna.tsinghua.edu.cn/CRAN/
+2. 安装方法。\\
+https://cran.r-project.org/doc/manuals/r-release/R-admin.html#Simple-compilation
+3. 有给个错误\\
+ A.readline-devel。直接安装。yum install readline
+ B.libcurl.本来是需求是7.22,实际为：7.29
+rpm -Uvh http://www.city-fan.org/ftp/contrib/yum-repo/rhel6/x86_64/city-fan.org-release-1-13.rhel6.noarch.rpm
+yum install libcurl
+升级到7.57,错误依然,安装libcurl-devel 后解决
+这个是由，
+http://stackmirror.bird.so/page/s1gp21vd99v6
+参考到查到的资料。
+https://cran.r-project.org/web/packages/curl/index.html
+安装命令
+#+BEGIN_EXAMPLE
+yum install libcurl-devel
+#+END_EXAMPLE
+接下来，要先make ,直接使用make install 是不行的。
+make
+make check
+make install这一步也需要。
+** DONE test run R in org 
+   CLOSED: [2018-01-03 三 21:22]
 ***** install R package http://bird.so/search?q=centos%20yum%20dnfdragora
 #+BEGIN_EXAMPLE
 install.packages("ggplot2")
@@ -73,7 +140,7 @@ install.packages("ggplot2")
  #+RESULTS:
  #+BEGIN_ORG
  #+attr_latex: :width 3in
- #+attr_org: :width 800
+ #+attr_org: :widtexport TEXINPUTS=/usr/local/texlive/2017/texmf-dist/tex/latex/latexconfigh 800
  #+name: fig:R35NewST
  #+caption: 改进后使用的R-QQ及SW分析
  [[file:figure/R35NewST.png]]
@@ -101,71 +168,43 @@ It's so sample and ignore it.
 **** TODO run bash in emacs org mode
 
 *** centos chinese local 
+centos最小安装后，安装XFCE，不显示中文。安装字体后OK
 #+BEGIN_EXAMPLE
 yum installgroup "fonts"
 #+END_EXAMPLE 
-** TODO use bash or sh src code clone spacemacs 
-#+BEGIN_SRC sh
-ls
-#+END_SRC
 
-Modify spacemacs-start-directory variable
+#+BEGIN_EXPORT latex
+\end{CJK}
+#+END_EXPORT
+** DONE TEST run perl in org
+   CLOSED: [2018-01-03 三 21:31]
+add line for perl language.
+#+BEGIN_SRC perl :exports both
+return ("hello world中文");
 
-This solution is better suited to "embed" Spacemacs into your own configuration. Say you cloned Spacemacs in ~/.emacs.d/spacemacs/ then drop these lines in ~/.emacs.d/init.el:
-
-(setq spacemacs-start-directory "~/.emacs.d/spacemacs/")
-(load-file (concat spacemacs-start-directory "init.el"))
-
-#+BEGIN_SRC sh
-git clone https://github.com/syl20bnr/spacemacs.git ~/.emacs.d/spacemacs/
-#+END_SRC
-** use shell-command to clone spacemacs
-Only clone the develop branch
-#+begin_src emacs-lisp
-(shell-command "git clone -b develop https://github.com/syl20bnr/spacemacs.git ~/.emacs.d/")
-#+end_src
-
-#+RESULTS:
-: 0
-
-
-** PDF输出
-
-**** Use R install texlive package .
-*****  File `wrapfig.sty' not found. problem.
-install tinytex package
-#+BEGIN_EXAMPLE
-R
-install.packages("tinytex")
-#+END_EXAMPLE
-
-#+BEGIN_SRC R
-tinytex::tlmgr_search("wrapfig.sty")
 #+END_SRC
 
 #+RESULTS:
-: 127
-** 从源码包直接安装R
-1.下载：
-https://mirrors.tuna.tsinghua.edu.cn/CRAN/
-2.安装方法。
-https://cran.r-project.org/doc/manuals/r-release/R-admin.html#Simple-compilation
-3.有给个错误
-A。readline-devel。直接安装。yum install readline
-B。libcurl.本来是需求是7.22,实际为：7.29
-rpm -Uvh http://www.city-fan.org/ftp/contrib/yum-repo/rhel6/x86_64/city-fan.org-release-1-13.rhel6.noarch.rpm
-yum install libcurl
-升级到7.57,错误依然,安装libcurl-devel 后解决
-这个是由，
-http://stackmirror.bird.so/page/s1gp21vd99v6
-参考到查到的资料。
-https://cran.r-project.org/web/packages/curl/index.html
-安装命令
-#+BEGIN_EXAMPLE
-yum install libcurl-devel
-#+END_EXAMPLE
-接下来，要先make ,直接使用make install 是不行的。
-make
-make check
-make install貌似这一步不需要了。
+: hello world中文
+** DONE test C in org
+   CLOSED: [2018-01-03 三 22:03]
+add (c . t) in .spacemacs file.
+#+HEADERS: :includes <math.h> :flags -lm 
+#+HEADERS: :var x=1.0 :var y=4.0 :var z=10.0
+#+BEGIN_SRC C :exports both
+double pi = 4*atan(1);
+double r, theta, phi;
+r = sqrt(x*x+y*y+z*z);
+theta = acos(z/r) * 180.0/pi;
+phi = atan2(y,x) * 180.0/pi;
+printf("%f \n %f \n%f", r, theta, phi);
+#+END_SRC
 
+#+RESULTS:
+| 10.816654 |
+| 22.406871 |
+| 75.963757 |
+#+BEGIN_EXAMPLE
+%#+LaTeX_HEADER: \hypersetup{bookmarks=true}
+#+LaTeX_HEADER: \hypersetup{bookmarks=true,bookmarksnumbered=true}
+#+END_EXAMPLE
