@@ -368,6 +368,7 @@ before packages are loaded."
                                                            (R      . t)
                                                            (perl   . t)
                                                            (C      . t)
+                                                           (python . t)
                                                            ))
   ;;(add-to-list 'org-latex-packages-alist '("" "listingsutf8"))
   )
